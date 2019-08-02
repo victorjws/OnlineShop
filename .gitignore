@@ -274,3 +274,7 @@ $RECYCLE.BIN/
 
 # Secrets
 secrets.json
+
+# Media
+media/
+.media/
