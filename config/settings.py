@@ -55,8 +55,10 @@ INSTALLED_APPS = [
 ]
 
 INSTALLED_APPS += [
+    'django.contrib.humanize',
     'rest_framework',
     'customer',
+    'product',
 ]
 
 MIDDLEWARE = [

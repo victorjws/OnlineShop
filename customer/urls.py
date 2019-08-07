@@ -1,9 +1,8 @@
-from django.contrib import admin
 from django.urls import path
 
-from customer.views import CustomerLoginView
-from customer.views import CustomerLogoutView
-from customer.views import CustomerRegisterView
+from .views import CustomerLoginView
+from .views import CustomerLogoutView
+from .views import CustomerRegisterView
 
 urlpatterns = [
     path('login/', CustomerLoginView.as_view(), name='login'),
