@@ -2,8 +2,16 @@ from django.views.generic import ListView
 from django.views.generic import DetailView
 from rest_framework import generics
 from rest_framework import mixins
+from rest_framework import status
+from rest_framework.generics import ListAPIView
+from rest_framework.generics import RetrieveAPIView
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
+from product.pagination import ProductPagination
+from .models import Category
 from .models import Product
+from .serializer import CategorySerializer
 from .serializer import ProductSerializer
 
 
@@ -24,21 +32,33 @@ from .serializer import ProductSerializer
 #         return context
 
 
-class ProductListAPI(generics.GenericAPIView, mixins.ListModelMixin):
+class ProductListAPI(ListAPIView):
     serializer_class = ProductSerializer
 
+    # def get_queryset(self):
+    #     return Product.objects.all().order_by('-pk')
+
     def get_queryset(self):
-        return Product.objects.all().order_by('-pk')
+        queryset = Product.objects.all().order_by('-pk')
+        limit_count = self.request.query_params.get('limit_count', None)
+        category = self.request.query_params.get('category', None)
+        if limit_count:
+            queryset = queryset[:int(limit_count)]
+        if category:
+            queryset = queryset.filter(categories=category)
+        return queryset
 
-    def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
 
-
-class ProductDetailAPI(generics.GenericAPIView, mixins.RetrieveModelMixin):
+class ProductDetailAPI(RetrieveAPIView):
     serializer_class = ProductSerializer
 
     def get_queryset(self):
         return Product.objects.all().order_by('pk')
 
-    def get(self, request, *args, **kwargs):
-        return self.retrieve(request, *args, **kwargs)
+
+class CategoryListAPI(ListAPIView):
+    serializer_class = CategorySerializer
+
+    def get_queryset(self):
+        return Category.objects.all().order_by('pk')
+

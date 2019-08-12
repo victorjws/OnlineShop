@@ -1,6 +1,18 @@
 from django.db import models
 
 
+class Category(models.Model):
+    name = models.CharField(verbose_name='카테고리', max_length=256, unique=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        db_table = 'category'
+        verbose_name = '카테고리'
+        verbose_name_plural = '카테고리'
+
+
 class Product(models.Model):
     name = models.CharField(verbose_name='상품명', max_length=256)
     price = models.IntegerField(verbose_name='상품가격')
@@ -13,6 +25,10 @@ class Product(models.Model):
     is_discount = models.BooleanField(verbose_name='할인여부', default=False)
     discount_price = models.IntegerField(verbose_name='할인가격', blank=True,
                                          null=True)
+    categories = models.ManyToManyField(
+        verbose_name='카테고리',
+        to=Category,
+        related_name='%(app_label)s_%(class)s_related')
 
     def __str__(self):
         return self.name
