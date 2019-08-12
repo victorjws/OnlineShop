@@ -23,8 +23,8 @@ from django.views.generic import TemplateView
 urlpatterns = [
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
     path('admin/', admin.site.urls),
-    path('customer/', include('customer.urls')),
-    path('product/', include('product.urls')),
+    path('customer/', include('customer.urls', namespace='customer')),
+    path('product/', include('product.urls', namespace='product')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
