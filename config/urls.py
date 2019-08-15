@@ -19,12 +19,19 @@ from django.contrib import admin
 from django.urls import include
 from django.urls import path
 from django.views.generic import TemplateView
+from rest_framework_jwt.views import obtain_jwt_token
+from rest_framework_jwt.views import refresh_jwt_token
+from rest_framework_jwt.views import verify_jwt_token
 
 urlpatterns = [
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
     path('admin/', admin.site.urls),
     path('customer/', include('customer.urls', namespace='customer')),
+    path('order/', include('order.urls', namespace='order')),
     path('product/', include('product.urls', namespace='product')),
+    path('obtain-token/', obtain_jwt_token, name='obtain-token'),
+    path('refresh-token/', refresh_jwt_token, name='refresh-token'),
+    path('verify-token/', verify_jwt_token, name='verify-token'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
