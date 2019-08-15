@@ -4,16 +4,22 @@ from django.contrib.auth import logout
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from django.db import IntegrityError
-from django.http import JsonResponse
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
-from django.views import View
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework import generics
+from rest_framework import permissions
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework_jwt.settings import api_settings
+from rest_framework_jwt.views import JSONWebTokenAPIView
 
 from customer.models import Customer
+from customer.serializer import TokenSerializer
+
+jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
+jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
 
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -26,7 +32,6 @@ class BaseView(APIView):
             'message': message,
         }
         return Response(data=result, status=status)
-        # return JsonResponse(result, status=status)
 
 
 class CustomerLoginView(BaseView):
@@ -52,6 +57,33 @@ class CustomerLoginView(BaseView):
         return self.response()
 
 
+# class LoginView(generics.CreateAPIView):
+#     permission_classes = (permissions.AllowAny,)
+#     serializer_class = TokenSerializer
+#     queryset = Customer.objects.all()
+#
+#     def post(self, request, *args, **kwargs):
+#         email = request.data['email']
+#         password = request.data['password']
+#         customer = authenticate(request, email=email, password=password)
+#         if customer is not None:
+#             login(request, customer)
+#             serializer = TokenSerializer(data={
+#                 "token": jwt_encode_handler(
+#                     jwt_payload_handler(customer)
+#                 )
+#             })
+#             serializer.is_valid()
+#             return Response(serializer.data)
+#         return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+# class LoginView(JSONWebTokenAPIView):
+#
+#     def post(self, request, *args, **kwargs):
+#         response = super().post(request, *args, **kwargs)
+
+
+
 class CustomerLogoutView(BaseView):
     def get(self, request):
         logout(request)
@@ -66,6 +98,10 @@ class CustomerRegisterView(BaseView):
         email = request.data['email']
         if not email:
             return self.resposne(message='아이디를 입력해주세요',
+                                 status=status.HTTP_400_BAD_REQUEST)
+        nickname = request.data['nickname']
+        if not nickname:
+            return self.response(message='닉네임을 입력해주세요',
                                  status=status.HTTP_400_BAD_REQUEST)
         password = request.data['password']
         if not password:

@@ -29,6 +29,7 @@ class Customer(AbstractBaseUser, PermissionsMixin):
     # password = models.CharField(verbose_name='비밀번호', max_length=128)
     # level = models.CharField(verbose_name='등급', max_length=8,
     #                          choices=(('admin', 'admin'), ('user', 'user')))
+    nickname = models.CharField(verbose_name='닉네임', max_length=255)
     register_date = models.DateTimeField(verbose_name='등록날짜',
                                          auto_now_add=True)
     shipping_address = models.TextField(verbose_name='배송주소')
