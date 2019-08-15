@@ -1,5 +1,7 @@
 from django.db import models
 
+from customer.models import Customer
+
 
 class Category(models.Model):
     name = models.CharField(verbose_name='카테고리', max_length=256, unique=True)
@@ -37,3 +39,22 @@ class Product(models.Model):
         db_table = 'product'
         verbose_name = '상품'
         verbose_name_plural = '상품'
+
+
+class Review(models.Model):
+    product = models.ForeignKey(verbose_name='상품', to=Product,
+                                on_delete=models.CASCADE)
+    customer = models.ForeignKey(verbose_name='고객', to=Customer,
+                                 on_delete=models.CASCADE)
+    rating = models.IntegerField(verbose_name='별점')
+    contents = models.TextField(verbose_name='내용')
+
+    def __str__(self):
+        return '고객: ' + str(self.customer) + ' 상품: ' + str(
+            self.product) + ' 별점: ' + str(
+            self.rating) + ' 내용: ' + str(self.contents)
+
+    class Meta:
+        db_table = 'review'
+        verbose_name = '상품평'
+        verbose_name_plural = '상품평'

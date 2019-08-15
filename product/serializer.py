@@ -1,4 +1,6 @@
 from rest_framework import serializers
+
+from .models import Review
 from .models import Category
 from .models import Product
 
@@ -14,4 +16,10 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
+        fields = '__all__'
+
+
+class ReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Review
         fields = '__all__'
