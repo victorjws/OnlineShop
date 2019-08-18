@@ -34,27 +34,27 @@ class BaseView(APIView):
         return Response(data=result, status=status)
 
 
-class CustomerLoginView(BaseView):
-    def get(self, request):
-        return render(request, template_name='customer/login.html')
-
-    def post(self, request):
-        email = request.data['email']
-        print(email)
-        if not email:
-            return self.response(message='아이디를 입력해주세요',
-                                 status=status.HTTP_400_BAD_REQUEST)
-        password = request.data['password']
-        print(password)
-        if not password:
-            return self.response(message='패스워드를 입력해주세요.',
-                                 status=status.HTTP_400_BAD_REQUEST)
-        customer = authenticate(request, email=email, password=password)
-        if customer is None:
-            return self.response(message='입력 정보를 확인해주세요.',
-                                 status=status.HTTP_400_BAD_REQUEST)
-        login(request, customer)
-        return self.response()
+# class CustomerLoginView(BaseView):
+#     def get(self, request):
+#         return render(request, template_name='customer/login.html')
+#
+#     def post(self, request):
+#         email = request.data['email']
+#         print(email)
+#         if not email:
+#             return self.response(message='아이디를 입력해주세요',
+#                                  status=status.HTTP_400_BAD_REQUEST)
+#         password = request.data['password']
+#         print(password)
+#         if not password:
+#             return self.response(message='패스워드를 입력해주세요.',
+#                                  status=status.HTTP_400_BAD_REQUEST)
+#         customer = authenticate(request, email=email, password=password)
+#         if customer is None:
+#             return self.response(message='입력 정보를 확인해주세요.',
+#                                  status=status.HTTP_400_BAD_REQUEST)
+#         login(request, customer)
+#         return self.response()
 
 
 # class LoginView(generics.CreateAPIView):
@@ -83,11 +83,10 @@ class CustomerLoginView(BaseView):
 #         response = super().post(request, *args, **kwargs)
 
 
-
-class CustomerLogoutView(BaseView):
-    def get(self, request):
-        logout(request)
-        return self.response()
+# class CustomerLogoutView(BaseView):
+#     def get(self, request):
+#         logout(request)
+#         return self.response()
 
 
 class CustomerRegisterView(BaseView):
