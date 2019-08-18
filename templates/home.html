@@ -439,11 +439,8 @@
 {% endblock %}
 {% block script %}
 <script src="{% static 'js/product.js' %}"></script>
-<script>
-  $(document).ready(function () {
-    send_data['limit_count'] = 4;
-    getProductData(1);
-  });
-
-</script>
+{% endblock %}
+{% block ready %}
+send_data['limit_count'] = 4;
+getProductData(1);
 {% endblock %}

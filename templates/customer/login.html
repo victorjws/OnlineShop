@@ -30,19 +30,15 @@
     </div>
 </div>
 {% endblock %}
-{% block script %}
-<script>
-$(document).ready(function () {
-    $('#loginButton').click(function() {
-        $.post('/obtain-token/', {'email': $('#email').val(), 'password': $('#password').val()
-        }).done(function(data) {
-            Cookies.remove('token');
-            Cookies.set('token', data.token);
-            window.location = '/';
-        }).fail(function(data) {
-            alert(document.cookie)
-        });
+{% block ready %}
+$('#loginButton').click(function() {
+    $.post('/obtain-token/', {'email': $('#email').val(), 'password': $('#password').val()
+    }).done(function(data) {
+        Cookies.remove('token');
+        Cookies.set('token', data.token);
+        window.location = '/';
+    }).fail(function(data) {
+        alert(document.cookie)
     });
 });
-</script>
 {% endblock %}

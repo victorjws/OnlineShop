@@ -24,19 +24,14 @@
     </div>
 </div>
 {% endblock %}
-{% block script %}
-<script>
-$(document).ready(function () {
-  $('#register').click(function() {
+{% block ready %}
+$('#register').click(function() {
     $.post('{% url "customer:register" %}', {'email': $('#email').val(), 'nickname': $('#nickname').val(),
             'password': $('#password').val()}, function() {
-      alert('가입을 환영합니다!');
-      window.location = "{% url 'customer:login' %}";
+        alert('가입을 환영합니다!');
+        window.location = "{% url 'customer:login' %}";
     }).fail(function(data) {
-      alert(data.message);
+        alert(data.message);
     });
-  });
 });
-
-</script>
 {% endblock %}

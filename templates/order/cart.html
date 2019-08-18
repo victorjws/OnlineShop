@@ -42,26 +42,25 @@
                 <div class="cart-total mb-3">
                     <h3>Cart Totals</h3>
                     <p class="d-flex">
-                        <span>Subtotal</span>
-                        <span>$20.60</span>
+                        <span>소 계</span>
+                        <span id="subtotal"></span>
                     </p>
                     <p class="d-flex">
-                        <span>Delivery</span>
-                        <span>$0.00</span>
+                        <span>배송비</span>
+                        <span id="delivery"></span>
                     </p>
                     <p class="d-flex">
-                        <span>Discount</span>
-                        <span>$3.00</span>
+                        <span>할 인</span>
+                        <span id="discount"></span>
                     </p>
                     <hr>
                     <p class="d-flex total-price">
-                        <span>Total</span>
-                        <span>$17.60</span>
+                        <span>총 계</span>
+                        <span id="total"></span>
                     </p>
                 </div>
                 <p class="text-center"><a href="checkout.html"
-                                          class="btn btn-primary py-3 px-4">Proceed to
-                    Checkout</a></p>
+                                          class="btn btn-primary py-3 px-4">주문하기</a></p>
             </div>
         </div>
     </div>
@@ -70,10 +69,22 @@
 {% block script %}
 <script src="{% static 'js/product.js' %}"></script>
 <script>
+let subtotal = 0;
+function setTotal() {
+    $("#subtotal").html("");
+    $("#delivery").html("");
+    $("#discount").html("");
+    $("#total").html("");
+    $("#subtotal").html(subtotal.format() + " 원");
+    $("#delivery").html("0 원");
+    $("#discount").html("0 원");
+    $("#total").html(subtotal.format() + " 원");
+};
 function putCartData(result) {
     let cart
+    $("#cart-table").html("");
     $.each(result, function (index, data) {
-        let total_price = data.product.price * data.quantity
+        let total_price;
         cart = '<tr class="text-center">'
             + '<td class="product-remove">'
             +    '<a href="#"><span class="ion-ios-close"></span></a></td>'
@@ -82,18 +93,27 @@ function putCartData(result) {
             + '</td>'
             + '<td class="product-name">'
             +    '<h3>' + data.product.name + '</h3>'
-            +    '<p>Far far away, behind the word mountains, far from the countries</p>'
             + '</td>'
-            + '<td class="price">' + data.product.price.format() + '원</td>'
+            + '<td class="price">';
+            if(data.product.is_discount){
+                cart += data.product.discount_price.format();
+                total_price = data.product.discount_price * data.quantity;
+            } else {
+                cart += data.product.price.format();
+                total_price = data.product.price * data.quantity;
+            }
+            cart += '원</td>'
             + '<td class="quantity">'
             +    '<div class="input-group mb-3">'
-            +        '<input type="text" name="quantity" class="quantity form-control input-number" value="' + data.quantity + '" min="1" max="100">'
+            +        '<input type="text" name="quantity" class="quantity form-control input-number" value="' + data.quantity + '" min="1" max="9999">'
             +    '</div>'
             + '</td>'
             + '<td class="total">' + total_price.format() + '원</td>'
-            + '</tr>'
+            + '</tr>';
         $("#cart-table").append(cart);
+        subtotal += total_price;
     });
+    setTotal()
 };
 function getCartData() {
     $.ajax({
@@ -108,39 +128,28 @@ function getCartData() {
     });
 };
 $(document).ready(function(){
-var quantitiy=0;
-     $('.quantity-right-plus').click(function(e){
-
-                // Stop acting like a button
-                e.preventDefault();
-                // Get the field name
-                var quantity = parseInt($('#quantity').val());
-
-                // If is not undefined
-
-                        $('#quantity').val(quantity + 1);
-
-
-                        // Increment
-
-        });
-
-         $('.quantity-left-minus').click(function(e){
-                // Stop acting like a button
-                e.preventDefault();
-                // Get the field name
-                var quantity = parseInt($('#quantity').val());
-
-                // If is not undefined
-
-                        // Increment
-                        if(quantity>0){
-                        $('#quantity').val(quantity - 1);
-                        }
-        });
-        getCartData();
-
+    var quantity=0;
+    $('.quantity-right-plus').click(function(e){
+        // Stop acting like a button
+        e.preventDefault();
+        // Get the field name
+        var quantity = parseInt($('#quantity').val());
+        // If is not undefined
+        $('#quantity').val(quantity + 1);
+        // Increment
+    });
+    $('.quantity-left-minus').click(function(e){
+        // Stop acting like a button
+        e.preventDefault();
+        // Get the field name
+        var quantity = parseInt($('#quantity').val());
+        // If is not undefined
+        // Increment
+        if(quantity>0){
+            $('#quantity').val(quantity - 1);
+        }
+    });
+    getCartData();
 });
-
 </script>
 {% endblock %}

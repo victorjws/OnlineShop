@@ -171,11 +171,9 @@
 {% endblock %}
 {% block script %}
 <script src="{% static 'js/product.js' %}"></script>
-<script>
-  $(document).ready(function () {
-    send_data['category'] = "";
-    getProductData(2);
-    getCategoryData();
-  });
-</script>
+{% endblock %}
+{% block ready %}
+send_data['category'] = "";
+getProductData(2);
+getCategoryData();
 {% endblock %}
