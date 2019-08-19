@@ -48,8 +48,10 @@ function getProductDetail(id) {
 //};
 function putProductData(result, version) {
     let product;
+    let pagination;
     $("#product-table").html("");
-    $.each(result, function (index, data) {
+    $("#pagination").html("");
+    $.each(result.results, function (index, data) {
         switch(version){
             case 1:
                 product = '<div class="col-sm-12 col-md-6 col-lg-3 ftco-animate d-flex fadeInUp ftco-animated">'
@@ -90,12 +92,24 @@ function putProductData(result, version) {
             + '<span><i class="ion-ios-cart ml-1"></i></span></a></p></div></div></div>';
         $("#product-table").append(product);
     });
+    pagination = '<li><a href="' + result.previous + '">&lt;</a></li>';
+    $.each(result.page_links, function (index, data) {
+        if (data[2]){
+            pagination += '<li class="active"><span>' + data[1] + '</span></li>';
+        } else if (data[3]){
+            pagination += '<li class="disabled"><span aria-hidden="true">&hellip;</span></li>';
+        } else {
+            pagination += '<li><a href="javascript:getProductData(\'' + data[0] + '\', 2);">' + data[1] + '</a></li>';
+        }
+    });
+    pagination +='<li><a href="' + result.next + '">&gt;</a></li>';
+    $("#pagination").html(pagination);
 };
 
-function getProductData(version) {
+function getProductData(url, version) {
     $.ajax({
         method: 'GET',
-        url: "/product/list-api/",
+        url: url,
         data: send_data,
         success: function (result){
             putProductData(result, version);

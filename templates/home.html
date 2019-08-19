@@ -441,6 +441,7 @@
 <script src="{% static 'js/product.js' %}"></script>
 {% endblock %}
 {% block ready %}
+let target_url = "{% url 'product:list-api' %}";
 send_data['limit_count'] = 4;
-getProductData(1);
+getProductData(target_url, 1);
 {% endblock %}

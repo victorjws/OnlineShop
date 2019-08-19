@@ -2,6 +2,7 @@ from rest_framework.generics import ListAPIView
 from rest_framework.generics import RetrieveAPIView
 
 from product.models import Review
+from product.pagination import ProductPagination
 from product.serializer import ReviewSerializer
 from .models import Category
 from .models import Product
@@ -11,6 +12,7 @@ from .serializer import ProductSerializer
 
 class ProductListAPI(ListAPIView):
     serializer_class = ProductSerializer
+    pagination_class = ProductPagination
 
     def get_queryset(self):
         queryset = Product.objects.all().order_by('-pk')
