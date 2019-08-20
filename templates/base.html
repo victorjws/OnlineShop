@@ -145,7 +145,7 @@
                 <div class="ftco-footer-widget mb-4 ml-md-5">
                     <h2 class="ftco-heading-2">Menu</h2>
                     <ul class="list-unstyled">
-                        <li><a href="#" class="py-2 d-block">Shop</a></li>
+                        <li><a href="{% url 'product:list' %}" class="py-2 d-block">Shop</a></li>
                         <li><a href="#" class="py-2 d-block">About</a></li>
                         <li><a href="#" class="py-2 d-block">Journal</a></li>
                         <li><a href="#" class="py-2 d-block">Contact Us</a></li>
@@ -180,10 +180,10 @@
                             </li>
                             <li>
                                 <a href="#"><span class="icon icon-phone"></span><span
-                                        class="text">+2 392 3929 210</span></a>
+                                        class="text">+81 123 4567 8901</span></a>
                             </li>
                             <li><a href="#"><span class="icon icon-envelope"></span><span
-                                    class="text">info@yourdomain.com</span></a></li>
+                                    class="text">admin@admin.com</span></a></li>
                         </ul>
                     </div>
                 </div>
@@ -254,55 +254,13 @@
 <!--  <script src="{% static 'js/google-map.js' %}"></script>-->
 <script src="{% static 'js/main.js' %}"></script>
 <script src="{% static 'js/jwt-decode.min.js' %}"></script>
+<script src="{% static 'js/customer-auth.js' %}"></script>
 
-<script>
-function logout() {
-    Cookies.remove('token');
-};
-function verifyToken(token) {
-    let _data = {"token": token}
-    return $.ajax({
-        method: 'POST',
-        url: "/verify-token/",
-        data: _data,
-        async: false,
-        success: function (result){
-            console.log(result);
-        },
-        error: function(result) {
-            logout();
-            alert("토큰이 만료되었습니다.\n다시 로그인해주세요.");
-            console.log(result);
-        }
-    });
-}
-function checkAuthStatus() {
-    let stored_token = Cookies.get('token');
-    let show_nickname;
-    let login;
-    $("#show-nickname").html("");
-    $("#login").html("");
-    if (stored_token !== undefined){
-        verifyToken(stored_token);
-        stored_token = Cookies.get('token');
-    }
-    if (stored_token !== undefined){
-        let decoded = jwt_decode(stored_token);
-        show_nickname = '<span class="text">' + decoded.nickname + '님 환영합니다!</span>';
-        login = '<a href="/" onclick="logout();" class="nav-link">Logout</a>';
-    }else{
-        show_nickname = '<span class="text">환영합니다!</span>';
-        login = '<a href="{% url 'customer:login' %}" class="nav-link">Login</a>';
-    }
-    $("#show-nickname").html(show_nickname);
-    $("#login").html(login);
-};
-</script>
 {% block script %}
 {% endblock %}
 <script>
 $(document).ready(function () {
-    checkAuthStatus();
+    renderLoginStatus();
 {% block ready %}
 {% endblock %}
 });

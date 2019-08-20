@@ -20,7 +20,7 @@
                                 <p class="mb-4">A small river named Duden flows by their place
                                     and supplies it with the necessary regelialia. It is a
                                     paradisematic country.</p>
-                                <p><a href="#" class="btn-custom">Discover Now</a></p>
+                                <p><a href="{% url 'product:list' %}" class="btn-custom">Discover Now</a></p>
                             </div>
                         </div>
                     </div>
@@ -45,7 +45,7 @@
                                 <p class="mb-4">A small river named Duden flows by their place
                                     and supplies it with the necessary regelialia. It is a
                                     paradisematic country.</p>
-                                <p><a href="#" class="btn-custom">Discover Now</a></p>
+                                <p><a href="{% url 'product:list' %}" class="btn-custom">Discover Now</a></p>
                             </div>
                         </div>
                     </div>
@@ -441,6 +441,7 @@
 <script src="{% static 'js/product.js' %}"></script>
 {% endblock %}
 {% block ready %}
+send_data = {};
 let target_url = "{% url 'product:list-api' %}";
 send_data['limit_count'] = 4;
 getProductData(target_url, 1);

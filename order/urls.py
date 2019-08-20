@@ -1,6 +1,8 @@
 from django.urls import path
 from django.views.generic import TemplateView
 
+# from .views import CartRetrieveUpdateDestroyAPIView
+from .views import CartExistCheckAPI
 from .views import OrderListAPI
 from .views import CartListAPI
 
@@ -12,4 +14,7 @@ urlpatterns = [
          name='cart'),
     path('cart-api/', CartListAPI.as_view(), name='cart-api'),
     path('order-api/', OrderListAPI.as_view(), name='order-api'),
+    path('exist-api/', CartExistCheckAPI.as_view(), name='exist-api'),
+    # path('cart-modify/', CartRetrieveUpdateDestroyAPIView.as_view(),
+    #      name='cart-modify-api')
 ]

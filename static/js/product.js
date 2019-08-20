@@ -1,5 +1,4 @@
 let send_data = {};
-
 Number.prototype.format = function(){
     if(this==0) return 0;
     var reg = /(^[+-]?\d+)(\d{3})/;
@@ -38,6 +37,7 @@ function putProductDetail(data){
 function getProductDetail(id) {
     $.ajax({
         url: "/product/detail-api/" + id + "/",
+        dataType : "json",
         success: function (result) {
             putProductDetail(result);
         }
@@ -86,7 +86,7 @@ function putProductData(result, version) {
             product += '<span>' + data.price.format() + '원</span>';
         }
         product += '</div><p class="bottom-area d-flex px-3">'
-            + '<a href="' + '#' + '" class="add-to-cart text-center py-2 mr-1">'
+            + '<a href="javascript:clickAddCartButton(' + data.id + ', 1);" class="add-to-cart text-center py-2 mr-1">'
             + '<span>장바구니 담기<i class="ion-ios-add ml-1"></i></span></a>'
             + '<a href="' + '#' + '" class="buy-now text-center py-2">바로주문'
             + '<span><i class="ion-ios-cart ml-1"></i></span></a></p></div></div></div>';
@@ -111,12 +111,15 @@ function getProductData(url, version) {
         method: 'GET',
         url: url,
         data: send_data,
+        dataType : "json",
+        contentType:"application/json",
         success: function (result){
             putProductData(result, version);
         }
     });
 };
-function putCategoryData(result){
+function putCategoryData(result, url){
+    send_data = {};
     let category;
     $("#category-table").html("");
     $.each(result, function (index, data) {
@@ -126,17 +129,94 @@ function putCategoryData(result){
     });
     $("#category-table").on("click", "li", function(){
         send_data['category'] = $(this).attr("id");
-        getProductData(2);
+        getProductData("/product/list-api/", 2);
     });
 };
-function getCategoryData(){
+function getCategoryData(url){
     $.ajax({
-        url: "/product/category-list-api/",
+        url: url,
+        dataType : "json",
+        contentType:"application/json",
         success: function (result){
-            putCategoryData(result);
+            putCategoryData(result, url);
         },
         error: function (response){
             console.log(response);
         }
     });
 };
+function createCart(send_data){
+    $.ajax({
+        method: 'POST',
+        url: "/order/cart-api/",
+        data: JSON.stringify(send_data),
+        dataType : "json",
+        contentType:"application/json",
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader("Authorization", "Bearer " + Cookies.get('token'));
+        },
+        success: function (result){
+            alert("장바구니에 성공적으로 담았습니다.");
+        },
+        error: function (result){
+            alert("에러가 발생했습니다.");
+        }
+    });
+};
+//function updateCart(send_data){
+//    $.ajax({
+//        method: 'PUT',
+//        url: "/order/cart-api/",
+//        data: JSON.stringify(send_data),
+//        dataType : "json",
+//        contentType:"application/json",
+//        beforeSend: function(xhr) {
+//            xhr.setRequestHeader("Authorization", "Bearer " + Cookies.get('token'));
+//        },
+//        success: function (result){
+//            alert("장바구니에 성공적으로 담았습니다.");
+//        },
+//        error: function (result){
+//            alert("에러가 발생했습니다.");
+//        }
+//    });
+//};
+function clickAddCartButton(product_id, quantity){
+    send_data = {};
+    send_data['product_id'] = product_id;
+    send_data['quantity'] = quantity;
+    if (checkAlreadyCart(product_id)){
+        console.log(true);
+        alert("이미 장바구니에 담았습니다.")
+    }else{
+        console.log(false);
+        createCart(send_data);
+    }
+}
+function checkAlreadyCart(product_id){
+    send_data = {};
+    send_data['product_id'] = product_id;
+    let r;
+    $.ajax({
+        method: 'GET',
+        url: "/order/exist-api/",
+        data: send_data,
+        dataType : "json",
+        contentType:"application/json",
+        async: false,
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader("Authorization", "Bearer " + Cookies.get('token'));
+        },
+        success: function (result){
+            if(result.result){
+                r = true;
+            }else{
+                r = false;
+            }
+        },
+        error: function (result){
+            console.log(result);
+        }
+    });
+    return r;
+}
