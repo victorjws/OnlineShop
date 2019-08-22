@@ -59,8 +59,8 @@
                         <span id="total"></span>
                     </p>
                 </div>
-                <p class="text-center"><a href="checkout.html"
-                                          class="btn btn-primary py-3 px-4">주문하기</a></p>
+                <p class="text-center"><a id="order" href="javascript:void(0);"
+                                          class="   btn btn-primary py-3 px-4">주문하기</a></p>
             </div>
         </div>
     </div>
@@ -68,88 +68,13 @@
 {% endblock %}
 {% block script %}
 <script src="{% static 'js/product.js' %}"></script>
+<script src="{% static 'js/cart.js' %}"></script>
+<script src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js" type="text/javascript"></script>
 <script>
-let subtotal = 0;
-function setTotal() {
-    $("#subtotal").html("");
-    $("#delivery").html("");
-    $("#discount").html("");
-    $("#total").html("");
-    $("#subtotal").html(subtotal.format() + " 원");
-    $("#delivery").html("0 원");
-    $("#discount").html("0 원");
-    $("#total").html(subtotal.format() + " 원");
-};
-function putCartData(result) {
-    let cart
-    $("#cart-table").html("");
-    $.each(result, function (index, data) {
-        let total_price;
-        cart = '<tr class="text-center">'
-            + '<td class="product-remove">'
-            +    '<a href="#"><span class="ion-ios-close"></span></a></td>'
-            + '<td class="image-prod">'
-            +    '<div class="img" style="background-image:url(' + data.product.picture + ');"></div>'
-            + '</td>'
-            + '<td class="product-name">'
-            +    '<h3>' + data.product.name + '</h3>'
-            + '</td>'
-            + '<td class="price">';
-            if(data.product.is_discount){
-                cart += data.product.discount_price.format();
-                total_price = data.product.discount_price * data.quantity;
-            } else {
-                cart += data.product.price.format();
-                total_price = data.product.price * data.quantity;
-            }
-            cart += '원</td>'
-            + '<td class="quantity">'
-            +    '<div class="input-group mb-3">'
-            +        '<input type="text" name="quantity" class="quantity form-control input-number" value="' + data.quantity + '" min="1" max="9999">'
-            +    '</div>'
-            + '</td>'
-            + '<td class="total">' + total_price.format() + '원</td>'
-            + '</tr>';
-        $("#cart-table").append(cart);
-        subtotal += total_price;
-    });
-    setTotal()
-};
-function getCartData() {
-    $.ajax({
-        method: 'GET',
-        url: "/order/cart-api/",
-        beforeSend: function(xhr) {
-            xhr.setRequestHeader("Authorization", "Bearer " + Cookies.get('token'));
-        },
-        success: function (result){
-            putCartData(result);
-        }
-    });
-};
 </script>
 {% endblock %}
 {% block ready %}
-var quantity=0;
-$('.quantity-right-plus').click(function(e){
-    // Stop acting like a button
-    e.preventDefault();
-    // Get the field name
-    var quantity = parseInt($('#quantity').val());
-    // If is not undefined
-    $('#quantity').val(quantity + 1);
-    // Increment
-});
-$('.quantity-left-minus').click(function(e){
-    // Stop acting like a button
-    e.preventDefault();
-    // Get the field name
-    var quantity = parseInt($('#quantity').val());
-    // If is not undefined
-    // Increment
-    if(quantity>1){
-        $('#quantity').val(quantity - 1);
-    }
-});
+var code = "imp49137411";
+IMP.init(code);
 getCartData();
 {% endblock %}

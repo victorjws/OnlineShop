@@ -146,6 +146,7 @@ function getCategoryData(url){
     });
 };
 function createCart(send_data){
+    console.log(send_data);
     $.ajax({
         method: 'POST',
         url: "/order/cart-api/",
@@ -160,6 +161,7 @@ function createCart(send_data){
         },
         error: function (result){
             alert("에러가 발생했습니다.");
+            console.log(result)
         }
     });
 };
@@ -185,24 +187,28 @@ function clickAddCartButton(product_id, quantity){
     send_data = {};
     send_data['product_id'] = product_id;
     send_data['quantity'] = quantity;
-    if (checkAlreadyCart(product_id)){
-        console.log(true);
+
+    var r = checkAlreadyCart(product_id);
+    console.log("r:" + r);
+    if (r === true){
         alert("이미 장바구니에 담았습니다.")
-    }else{
-        console.log(false);
+    }else if (r === false){
+        console.log(send_data);
         createCart(send_data);
+    }else{
+        alert("오류가 발생하였습니다. 다시 로그인해주세요.")
+        console.log(error);
     }
 }
 function checkAlreadyCart(product_id){
-    send_data = {};
-    send_data['product_id'] = product_id;
+    let check = {};
     let r;
+    check['product_id'] = product_id;
     $.ajax({
         method: 'GET',
         url: "/order/exist-api/",
-        data: send_data,
+        data: check,
         dataType : "json",
-        contentType:"application/json",
         async: false,
         beforeSend: function(xhr) {
             xhr.setRequestHeader("Authorization", "Bearer " + Cookies.get('token'));
@@ -216,7 +222,25 @@ function checkAlreadyCart(product_id){
         },
         error: function (result){
             console.log(result);
+            r = "error";
         }
     });
     return r;
 }
+function setPlusMinusButtonEvent(){
+    var quantity=0;
+    $('.quantity-right-plus').click(function(e){
+        // Stop acting like a button
+        e.preventDefault();
+        var quantity = parseInt($(this).parent().parent().find('input').val());
+        $(this).parent().parent().find('input').val(quantity + 1);
+    });
+    $('.quantity-left-minus').click(function(e){
+        // Stop acting like a button
+        e.preventDefault();
+        var quantity = parseInt($(this).parent().parent().find('input').val());
+        if(quantity>1){
+            $(this).parent().parent().find('input').val(quantity - 1);
+        }
+    });
+};

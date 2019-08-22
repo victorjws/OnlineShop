@@ -274,6 +274,7 @@ $RECYCLE.BIN/
 
 # Secrets
 secrets.json
+secrets.py
 
 # Media
 media/

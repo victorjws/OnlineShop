@@ -336,27 +336,7 @@
 {% block ready %}
 send_data = {};
 let product_id = window.location.pathname.split("/")[2];
-var quantity=0;
-$('.quantity-right-plus').click(function(e){
-    // Stop acting like a button
-    e.preventDefault();
-    // Get the field name
-    var quantity = parseInt($('#quantity').val());
-    // If is not undefined
-    $('#quantity').val(quantity + 1);
-    // Increment
-});
-$('.quantity-left-minus').click(function(e){
-    // Stop acting like a button
-    e.preventDefault();
-    // Get the field name
-    var quantity = parseInt($('#quantity').val());
-    // If is not undefined
-    // Increment
-    if(quantity>1){
-        $('#quantity').val(quantity - 1);
-    }
-});
+setPlusMinusButtonEvent();
 getProductDetail(product_id);
 $("#add-to-cart").on("click", function() {
     clickAddCartButton(product_id, $('#quantity').val());

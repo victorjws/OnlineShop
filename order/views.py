@@ -1,21 +1,25 @@
+from django.db import transaction
+from django.db.models import Case
+from django.db.models import F
+from django.db.models import Sum
+from django.db.models import When
+from iamporter import Iamporter
 from rest_framework import mixins
 from rest_framework import permissions
-from rest_framework import status
 from rest_framework.generics import GenericAPIView
 from rest_framework.generics import ListCreateAPIView
-from rest_framework.generics import RetrieveAPIView
-from rest_framework.generics import RetrieveUpdateDestroyAPIView
 from rest_framework.response import Response
-from rest_framework.views import APIView
 from rest_framework_jwt.utils import jwt_decode_handler
 
-from customer.models import Customer
-from order.serializer import CartExistSerializer
-from product.models import Product
 from .models import Cart
 from .models import Order
 from .serializer import CartSerializer
 from .serializer import OrderSerializer
+from .serializer import CartExistSerializer
+from .serializer import PaymentCompleteSerializer
+
+from .secrets import imp_key
+from .secrets import imp_secret
 
 
 class OrderListAPI(ListCreateAPIView):
@@ -31,7 +35,7 @@ class OrderListAPI(ListCreateAPIView):
         return queryset
 
 
-class CartListAPI(ListCreateAPIView):
+class CartListAPI(ListCreateAPIView, mixins.UpdateModelMixin):
     serializer_class = CartSerializer
     permission_classes = [permissions.IsAuthenticated]
 
@@ -43,6 +47,10 @@ class CartListAPI(ListCreateAPIView):
     def post(self, request, *args, **kwargs):
         request.data['customer_id'] = request.user.pk
         return self.create(request, *args, **kwargs)
+
+    def update(self, request, *args, **kwargs):
+        request.data['customer_id'] = request.user.pk
+        return super().update(request, *args, **kwargs)
 
     # def create(self, request, *args, **kwargs):
     #     request.data['product'] = Product.object.get(
@@ -75,7 +83,6 @@ class CartExistCheckAPI(GenericAPIView):
         else:
             instance = {'result': 0}
         serializer = self.get_serializer(instance)
-        print(serializer.data)
         return Response(serializer.data)
 
 
@@ -88,3 +95,35 @@ class CartExistCheckAPI(GenericAPIView):
 #         product = self.request.query_params.get('product_id', None)
 #         queryset = Cart.objects.filter(customer=customer, product=product)
 #         return queryset
+
+class PaymentComplete(GenericAPIView):
+    serializer_class = PaymentCompleteSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        client = Iamporter(imp_key=imp_key,
+                           imp_secret=imp_secret)
+        imp_uid = request.data['imp_uid']
+        customer_id = request.user.pk
+        payment_info = client.find_payment(imp_uid=imp_uid)
+        queryset = Cart.objects.filter(customer=customer_id).aggregate(
+            total_amount=Sum(
+                Case(
+                    When(
+                        product__is_discount=True,
+                        then=F('product__discount_price')
+                    ),
+                    default=F('product__price')
+                )
+            )
+        )
+        if payment_info['amount'] == queryset['total_amount']:
+            with transaction.atomic():
+                Order.objects.bulk_create(
+                    Cart.objects.filter(customer=customer_id))
+                Cart.objects.filter(customer=customer_id).delete()
+            instance = {'status': 'success'}
+        else:
+            instance = {'status': 'failed'}
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
