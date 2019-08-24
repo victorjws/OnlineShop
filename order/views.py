@@ -11,15 +11,14 @@ from rest_framework.generics import ListCreateAPIView
 from rest_framework.response import Response
 from rest_framework_jwt.utils import jwt_decode_handler
 
+from config.settings import imp_key
+from config.settings import imp_secret
 from .models import Cart
 from .models import Order
 from .serializer import CartSerializer
 from .serializer import OrderSerializer
 from .serializer import CartExistSerializer
 from .serializer import PaymentCompleteSerializer
-
-from .secrets import imp_key
-from .secrets import imp_secret
 
 
 class OrderListAPI(ListCreateAPIView):
