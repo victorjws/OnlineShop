@@ -34,11 +34,11 @@
 $('#loginButton').click(function() {
     $.post('/obtain-token/', {'email': $('#email').val(), 'password': $('#password').val()
     }).done(function(data) {
-        Cookies.remove('token');
-        Cookies.set('token', data.token);
+        saveToken(data);
         window.location = '/';
     }).fail(function(data) {
-        alert(document.cookie)
+        alert("로그인에 실패했습니다.");
+        console.log(data);
     });
 });
 {% endblock %}
