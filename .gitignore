@@ -279,3 +279,6 @@ secrets.py
 # Media
 media/
 .media/
+
+# Dev
+dev_settings.py

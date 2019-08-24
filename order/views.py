@@ -85,16 +85,6 @@ class CartExistCheckAPI(GenericAPIView):
         return Response(serializer.data)
 
 
-# class CartRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
-#     serializer_class = CartSerializer
-#     permission_classes = [permissions.IsAuthenticated]
-#
-#     def get_queryset(self):
-#         customer = self.request.user.pk
-#         product = self.request.query_params.get('product_id', None)
-#         queryset = Cart.objects.filter(customer=customer, product=product)
-#         return queryset
-
 class PaymentComplete(GenericAPIView):
     serializer_class = PaymentCompleteSerializer
     permission_classes = [permissions.IsAuthenticated]

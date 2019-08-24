@@ -41,7 +41,7 @@ function putCartData(result) {
 	        +                '<i class="ion-ios-remove"></i>'
 	        +            '</button>'
 	        +        '</span>'
-            +        '<input id="quantity-' + data.product.id + '" type="text" name="quantity"'
+            +        '<input id="quantity-' + data.product.id + '" type="text" name="quantity" readonly '
             +           'class="quantity form-control input-number" value="' + data.quantity + '" min="1" max="99999">'
             +        '<span class="input-group-btn ml-2">'
 	        +            '<button type="button" class="quantity-right-plus btn" data-type="plus" data-field="">'
