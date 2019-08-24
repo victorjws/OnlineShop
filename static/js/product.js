@@ -199,7 +199,7 @@ function clickAddCartButton(product_id, quantity){
         alert("오류가 발생하였습니다. 다시 로그인해주세요.")
         console.log(error);
     }
-}
+};
 function checkAlreadyCart(product_id){
     let check = {};
     let r;
@@ -226,7 +226,7 @@ function checkAlreadyCart(product_id){
         }
     });
     return r;
-}
+};
 function setPlusMinusButtonEvent(){
     var quantity=0;
     $('.quantity-right-plus').click(function(e){

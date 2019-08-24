@@ -57,9 +57,6 @@ function putCartData(result) {
     });
     setTotal();
 };
-function setChangeQuantityEvent(){
-
-}
 function setIamport(total){
     $('#order').click(function(e){
         let stored_token = Cookies.get('token');
@@ -106,7 +103,7 @@ function setIamport(total){
             }
         });
     });
-}
+};
 function getCartData() {
     $.ajax({
         method: 'GET',
