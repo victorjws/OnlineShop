@@ -92,7 +92,12 @@ function putProductData(result, version) {
             + '<span><i class="ion-ios-cart ml-1"></i></span></a></p></div></div></div>';
         $("#product-table").append(product);
     });
-    pagination = '<li><a href="' + result.previous + '">&lt;</a></li>';
+
+    if (result.previous === null){
+        pagination = '<li><a href="javascript:void(0);">&lt;</a></li>';
+    } else {
+        pagination = '<li><a href="javascript:getProductData(\'' + result.previous + '\', 2);">&lt;</a></li>';
+    }
     $.each(result.page_links, function (index, data) {
         if (data[2]){
             pagination += '<li class="active"><span>' + data[1] + '</span></li>';
@@ -102,7 +107,11 @@ function putProductData(result, version) {
             pagination += '<li><a href="javascript:getProductData(\'' + data[0] + '\', 2);">' + data[1] + '</a></li>';
         }
     });
-    pagination +='<li><a href="' + result.next + '">&gt;</a></li>';
+    if (result.next === null){
+        pagination +='<li><a href="javascript:void(0);">&gt;</a></li>';
+    } else {
+        pagination +='<li><a href="javascript:getProductData(\'' + result.next + '\', 2);">&gt;</a></li>';
+    }
     $("#pagination").html(pagination);
 };
 
@@ -196,7 +205,7 @@ function clickAddCartButton(product_id, quantity){
         console.log(send_data);
         createCart(send_data);
     }else{
-        alert("오류가 발생하였습니다. 다시 로그인해주세요.")
+        alert("로그인이 필요한 서비스입니다.")
         console.log(error);
     }
 };
