@@ -88,7 +88,7 @@ function putProductData(result, version) {
         product += '</div><p class="bottom-area d-flex px-3">'
             + '<a href="javascript:clickAddCartButton(' + data.id + ', 1);" class="add-to-cart text-center py-2 mr-1">'
             + '<span>장바구니 담기<i class="ion-ios-add ml-1"></i></span></a>'
-            + '<a href="' + '#' + '" class="buy-now text-center py-2">바로주문'
+            + '<a href="javascript:clickOrderNowButton(' + data.id + ', 1);" class="buy-now text-center py-2">바로주문'
             + '<span><i class="ion-ios-cart ml-1"></i></span></a></p></div></div></div>';
         $("#product-table").append(product);
     });
@@ -114,7 +114,6 @@ function putProductData(result, version) {
     }
     $("#pagination").html(pagination);
 };
-
 function getProductData(url, version) {
     $.ajax({
         method: 'GET',
@@ -198,16 +197,20 @@ function clickAddCartButton(product_id, quantity){
     send_data['quantity'] = quantity;
 
     var r = checkAlreadyCart(product_id);
-    console.log("r:" + r);
+    var result = true;
     if (r === true){
         alert("이미 장바구니에 담았습니다.")
     }else if (r === false){
-        console.log(send_data);
         createCart(send_data);
-    }else{
+    }else if (r === 401){
         alert("로그인이 필요한 서비스입니다.")
-        console.log(error);
+        result = false;
+        window.location = "/customer/login/";
+    }else{
+        alert(r);
+        result = false;
     }
+    return result;
 };
 function checkAlreadyCart(product_id){
     let check = {};
@@ -231,25 +234,30 @@ function checkAlreadyCart(product_id){
         },
         error: function (result){
             console.log(result);
-            r = "error";
+            r = result.status;
         }
     });
     return r;
 };
+function clickOrderNowButton(product_id, quantity){
+    if (clickAddCartButton(product_id, quantity)){
+        window.location = "/order/cart/";
+    }
+}
 function setPlusMinusButtonEvent(){
     var quantity=0;
-    $('.quantity-right-plus').click(function(e){
+    $('.quantity-right-plus').on("click", function(e){
         // Stop acting like a button
         e.preventDefault();
         var quantity = parseInt($(this).parent().parent().find('input').val());
-        $(this).parent().parent().find('input').val(quantity + 1);
+        $(this).parent().parent().find('input').val(quantity + 1).trigger('change');
     });
-    $('.quantity-left-minus').click(function(e){
+    $('.quantity-left-minus').on("click", function(e){
         // Stop acting like a button
         e.preventDefault();
         var quantity = parseInt($(this).parent().parent().find('input').val());
         if(quantity>1){
-            $(this).parent().parent().find('input').val(quantity - 1);
+            $(this).parent().parent().find('input').val(quantity - 1).trigger('change');
         }
     });
 };

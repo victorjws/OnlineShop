@@ -47,9 +47,19 @@ class CartListAPI(ListCreateAPIView, mixins.UpdateModelMixin):
         request.data['customer_id'] = request.user.pk
         return self.create(request, *args, **kwargs)
 
-    def update(self, request, *args, **kwargs):
-        request.data['customer_id'] = request.user.pk
-        return super().update(request, *args, **kwargs)
+    # def put(self, request, *args, **kwargs):
+    #     return self.update(request, *args, **kwargs)
+    #
+    # def update(self, request, *args, **kwargs):
+    #     instance = Cart.objects.filter(customer=request.user.pk)
+    #     serializer = CartSerializer(instance=instance, data=request.data,
+    #                                 many=True)
+    #     serializer.customer_id = request.user.pk
+    #     print(serializer)
+    #     serializer.is_valid(raise_exception=True)
+    #     print(serializer.is_valid())
+    #     serializer.save()
+    #     return Response(serializer.data)
 
     # def create(self, request, *args, **kwargs):
     #     request.data['product'] = Product.object.get(
@@ -113,6 +123,7 @@ class PaymentComplete(GenericAPIView):
                 Cart.objects.filter(customer=customer_id).delete()
             instance = {'status': 'success'}
         else:
+
             instance = {'status': 'failed'}
         serializer = self.get_serializer(instance)
         return Response(serializer.data)

@@ -87,7 +87,7 @@ function checkNeedRefresh() {
     }
 };
 function registerCustomer(){
-    $('#register').click(function() {
+    $('#register').on("click", function() {
         _data = {
             'email': $('#email').val(),
             'nickname': $('#nickname').val(),
@@ -96,13 +96,13 @@ function registerCustomer(){
         };
         $.ajax({
             method: 'POST',
-            url: "{% url 'customer:register' %}",
+            url: "/customer/register/",
             data: JSON.stringify(_data),
             dataType : "json",
             contentType:"application/json",
             success: function (result){
                 alert('가입을 환영합니다!');
-                window.location = "{% url 'customer:login' %}";
+                window.location = "/customer/login/";
             },
             error: function (result){
                 alert("에러가 발생했습니다.");
