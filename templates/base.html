@@ -84,29 +84,33 @@
                 <li class="nav-item">
                     <a href="{% url 'home' %}" class="nav-link">Home</a>
                 </li>
-                <li class="nav-item dropdown active">
-                    <a class="nav-link dropdown-toggle"
-                       href="#"
-                       id="dropdown04"
-                       data-toggle="dropdown"
-                       aria-haspopup="true"
-                       aria-expanded="false">Catalog</a>
-                    <div class="dropdown-menu" aria-labelledby="dropdown04">
-                        <a class="dropdown-item" href="{% url 'product:list' %}">Shop</a>
-                        <a class="dropdown-item" href="{% url 'order:cart' %}">Cart</a>
-                        <a class="dropdown-item" href="{% url 'order:order-list' %}">Order</a>
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <a href="about.html" class="nav-link">About</a>
-                </li>
+<!--                <li class="nav-item dropdown active">-->
+<!--                    <a class="nav-link dropdown-toggle"-->
+<!--                       href="#"-->
+<!--                       id="dropdown04"-->
+<!--                       data-toggle="dropdown"-->
+<!--                       aria-haspopup="true"-->
+<!--                       aria-expanded="false">Catalog</a>-->
+<!--                    <div class="dropdown-menu" aria-labelledby="dropdown04">-->
+<!--                        <a class="dropdown-item" href="{% url 'product:list' %}">Shop</a>-->
+<!--                        <a class="dropdown-item" href="{% url 'order:cart' %}">Cart</a>-->
+<!--                        <a class="dropdown-item" href="{% url 'order:order-list' %}">Order</a>-->
+<!--                    </div>-->
+<!--                </li>-->
                 <li id="login" class="nav-item">
 
                 </li>
                 <li class="nav-item">
-                    <a href="contact.html" class="nav-link">Contact</a></li>
+                    <a href="{% url 'product:list' %}" class="nav-link">Shop</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'order:cart' %}" class="nav-link">Cart</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'order:order-list' %}" class="nav-link">Order</a>
+                </li>
                 <li class="nav-item cta cta-colored">
-                    <a href="{% url 'order:cart' %}" class="nav-link"><span class="icon-shopping_cart"></span>[0]</a>
+                    <a href="{% url 'order:cart' %}" class="nav-link"><span class="icon-shopping_cart"></span></a>
                 </li>
             </ul>
         </div>

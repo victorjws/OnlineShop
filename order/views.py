@@ -47,9 +47,18 @@ class CartListAPI(ListCreateAPIView, mixins.UpdateModelMixin):
         request.data['customer_id'] = request.user.pk
         return self.create(request, *args, **kwargs)
 
-    # def put(self, request, *args, **kwargs):
-    #     return self.update(request, *args, **kwargs)
-    #
+    def patch(self, request, *args, **kwargs):
+        data = {
+            i['product_id']: {k: v for k, v in i.items() if k != 'product_id'}
+            for i in request.data
+        }
+        for inst in self.get_queryset().filter(product_id__in=data.keys()):
+            serializer = self.get_serializer(inst, data=data[inst.product_id],
+                                             partial=True)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+        return Response("update complete")
+
     # def update(self, request, *args, **kwargs):
     #     instance = Cart.objects.filter(customer=request.user.pk)
     #     serializer = CartSerializer(instance=instance, data=request.data,
@@ -110,9 +119,9 @@ class PaymentComplete(GenericAPIView):
                 Case(
                     When(
                         product__is_discount=True,
-                        then=F('product__discount_price')
+                        then=F('product__discount_price') * F('quantity')
                     ),
-                    default=F('product__price')
+                    default=F('product__price') * F('quantity')
                 )
             )
         )
@@ -123,7 +132,7 @@ class PaymentComplete(GenericAPIView):
                 Cart.objects.filter(customer=customer_id).delete()
             instance = {'status': 'success'}
         else:
-
+            client.cancel_payment(imp_uid=imp_uid, reason="amount mismatch")
             instance = {'status': 'failed'}
         serializer = self.get_serializer(instance)
         return Response(serializer.data)

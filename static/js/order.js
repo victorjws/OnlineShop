@@ -44,6 +44,12 @@ function getOrderData() {
         },
         complete: function (result){
             setPlusMinusButtonEvent();
+        },
+        error: function (result){
+            if (result.status === 401){
+                alert("로그인이 필요한 서비스입니다.");
+                window.location = "/customer/login/";
+            }
         }
     });
 };

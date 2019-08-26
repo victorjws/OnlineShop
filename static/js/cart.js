@@ -69,49 +69,51 @@ function putCartData(result) {
 function setIamport(total){
     $('#order').click(function(e){
         updateServerQuantity();
-//        let stored_token = Cookies.get('token');
-//        let decoded = jwt_decode(stored_token);
-//        IMP.request_pay({
-//            pg : 'kakaopay',
-//            pay_method : 'card',
-//            merchant_uid : 'merchant_' + new Date().getTime(),
-//            name : 'OnlineShop 결제',
-//            amount : total,
-//            buyer_email : decoded.email,
-//        }, function(rsp) {
-//            if ( rsp.success ) {
-//                $.ajax({
-//                    url: "/order/payments-complete/",
-//                    method: "POST",
-//                    dataType: 'json',
-//                    contentType:"application/json",
-//                    data: JSON.stringify({
-//                        imp_uid: rsp.imp_uid
-//                    }),
-//                    beforeSend: function(xhr) {
-//                        xhr.setRequestHeader("Authorization", "Bearer " + Cookies.get('token'));
-//                    },
-//                }).success(function (data) {
-//                    if(data.status==='success'){
-//                        var msg = '결제가 완료되었습니다.';
-//                        msg += '\n고유ID : ' + rsp.imp_uid;
-//                        msg += '\n상점 거래ID : ' + rsp.merchant_uid;
-//                        msg += '\n결제 금액 : ' + rsp.paid_amount;
-//                        msg += '\n카드 승인번호 : ' + rsp.apply_num;
-//                    }
-//                    console.log(data);
-//                    alert(msg);
-//                    console.log(msg);
-//                }).fail(function (data) {
-//                    console.log(data);
-//                });
-//            } else {
-//                var msg = '결제에 실패하였습니다.';
-//                msg += '에러내용 : ' + rsp.error_msg;
-//                alert(msg);
-//                console.log(msg);
-//            }
-//        });
+        let stored_token = Cookies.get('token');
+        let decoded = jwt_decode(stored_token);
+        IMP.request_pay({
+            pg : 'kakaopay',
+            pay_method : 'card',
+            merchant_uid : 'merchant_' + new Date().getTime(),
+            name : 'OnlineShop 결제',
+            amount : total,
+            buyer_email : decoded.email,
+        }, function(rsp) {
+            if ( rsp.success ) {
+                $.ajax({
+                    url: "/order/payments-complete/",
+                    method: "POST",
+                    dataType: 'json',
+                    contentType:"application/json",
+                    data: JSON.stringify({
+                        imp_uid: rsp.imp_uid
+                    }),
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader("Authorization", "Bearer " + Cookies.get('token'));
+                    },
+                }).success(function (data) {
+                    var msg = "";
+                    if(data.status==='success'){
+                        msg = '결제가 완료되었습니다.';
+                        msg += '\n고유ID : ' + rsp.imp_uid;
+                        msg += '\n상점 거래ID : ' + rsp.merchant_uid;
+                        msg += '\n결제 금액 : ' + rsp.paid_amount;
+                        msg += '\n카드 승인번호 : ' + rsp.apply_num;
+                    }
+                    console.log(data);
+                    alert(msg);
+                    console.log(msg);
+                    window.location = "/order/";
+                }).fail(function (data) {
+                    console.log(data);
+                });
+            } else {
+                var msg = '결제에 실패하였습니다.';
+                msg += '에러내용 : ' + rsp.error_msg;
+                alert(msg);
+                console.log(msg);
+            }
+        });
     });
 };
 function changeQuantity(){
@@ -147,15 +149,16 @@ function updateServerQuantity(){
         var product_id = String(id_attr).split('-');
         var id = product_id[product_id.length-1];
         item = {};
-        item['product_id'] = id;
-        item['quantity'] = $(this).val();
+        item['product_id'] = Number(id);
+        item['quantity'] = Number($(this).val());
         _data.push(item);
     })
     console.log(_data);
     $.ajax({
-        method: 'PUT',
+        method: 'PATCH',
         url: "/order/cart-api/",
-        data: _data,
+        data: JSON.stringify(_data),
+        contentType: "Application/json",
         beforeSend: function(xhr) {
             xhr.setRequestHeader("Authorization", "Bearer " + Cookies.get('token'));
         },
@@ -166,7 +169,7 @@ function updateServerQuantity(){
             console.log(result);
         }
     });
-}
+};
 function getCartData() {
     $.ajax({
         method: 'GET',
@@ -184,7 +187,6 @@ function getCartData() {
             setIamport(total);
         },
         error: function (result){
-//            console.log(result.status);
             if (result.status === 401){
                 alert("로그인이 필요한 서비스입니다.");
                 window.location = "/customer/login/";
