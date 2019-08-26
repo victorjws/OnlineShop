@@ -6,17 +6,6 @@ Number.prototype.format = function(){
     while (reg.test(n)) n = n.replace(reg, '$1' + ',' + '$2');
     return n;
 };
-//function productDetail(id) {
-//    $.ajax({
-//      url: "/product/detail-api/" + id + "/",
-//      success: function (result) {
-//        $("#product-" + id).popover({
-//          html: true,
-//          content: result.name + "<br/>" + result.price.format() + "원"
-//        }).popover('show');
-//      }
-//    });
-//};
 function putProductDetail(data){
     let product_img;
     let product_name;
@@ -154,7 +143,6 @@ function getCategoryData(url){
     });
 };
 function createCart(send_data){
-    console.log(send_data);
     $.ajax({
         method: 'POST',
         url: "/order/cart-api/",
@@ -169,28 +157,9 @@ function createCart(send_data){
         },
         error: function (result){
             alert("에러가 발생했습니다.");
-            console.log(result)
         }
     });
 };
-//function updateCart(send_data){
-//    $.ajax({
-//        method: 'PUT',
-//        url: "/order/cart-api/",
-//        data: JSON.stringify(send_data),
-//        dataType : "json",
-//        contentType:"application/json",
-//        beforeSend: function(xhr) {
-//            xhr.setRequestHeader("Authorization", "Bearer " + Cookies.get('token'));
-//        },
-//        success: function (result){
-//            alert("장바구니에 성공적으로 담았습니다.");
-//        },
-//        error: function (result){
-//            alert("에러가 발생했습니다.");
-//        }
-//    });
-//};
 function clickAddCartButton(product_id, quantity){
     send_data = {};
     send_data['product_id'] = product_id;
@@ -233,7 +202,6 @@ function checkAlreadyCart(product_id){
             }
         },
         error: function (result){
-            console.log(result);
             r = result.status;
         }
     });

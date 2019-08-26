@@ -1,13 +1,13 @@
 from rest_framework.generics import ListAPIView
 from rest_framework.generics import RetrieveAPIView
 
-from product.models import Review
-from product.pagination import ProductPagination
-from product.serializer import ReviewSerializer
+from .pagination import ProductPagination
+from .models import Review
 from .models import Category
 from .models import Product
 from .serializer import CategorySerializer
 from .serializer import ProductSerializer
+from .serializer import ReviewSerializer
 
 
 class ProductListAPI(ListAPIView):
@@ -18,8 +18,6 @@ class ProductListAPI(ListAPIView):
         queryset = Product.objects.all().order_by('-pk')
         limit_count = self.request.query_params.get('limit_count', None)
         category = self.request.query_params.get('category', None)
-        # limit_count = self.request.data['limit_count']
-        # category = self.request.data['category']
         if limit_count:
             queryset = queryset[:int(limit_count)]
         if category:

@@ -39,7 +39,6 @@ function getOrderData() {
             xhr.setRequestHeader("Authorization", "Bearer " + Cookies.get('token'));
         },
         success: function (result){
-            console.log(result);
             putOrderData(result);
         },
         complete: function (result){
@@ -61,7 +60,6 @@ function updateCartData() {
             xhr.setRequestHeader("Authorization", "Bearer " + Cookies.get('token'));
         },
         success: function (result){
-            console.log(result);
             putOrderData(result);
         },
     });

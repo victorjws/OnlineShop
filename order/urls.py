@@ -1,8 +1,7 @@
 from django.urls import path
 from django.views.generic import TemplateView
 
-# from .views import CartRetrieveUpdateDestroyAPIView
-from order.views import PaymentComplete
+from .views import PaymentComplete
 from .views import CartExistCheckAPI
 from .views import OrderListAPI
 from .views import CartListAPI

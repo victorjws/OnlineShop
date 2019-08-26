@@ -1,9 +1,5 @@
 let subtotal = 0;
 let total = 0;
-//function noCommas(target){
-//    target.replace(/,/g, '');
-//    return target;
-//};
 function setTotal() {
     $("#subtotal").html("");
     $("#delivery").html("");
@@ -100,9 +96,7 @@ function setIamport(total){
                         msg += '\n결제 금액 : ' + rsp.paid_amount;
                         msg += '\n카드 승인번호 : ' + rsp.apply_num;
                     }
-                    console.log(data);
                     alert(msg);
-                    console.log(msg);
                     window.location = "/order/";
                 }).fail(function (data) {
                     console.log(data);
@@ -111,7 +105,6 @@ function setIamport(total){
                 var msg = '결제에 실패하였습니다.';
                 msg += '에러내용 : ' + rsp.error_msg;
                 alert(msg);
-                console.log(msg);
             }
         });
     });
@@ -138,7 +131,6 @@ function updateTotal(){
     $(".total").each(function(){
         var product_price = Number($(this).attr("total"));
         subtotal += product_price;
-//        console.log(subtotal);
     })
     setTotal();
 }
@@ -153,7 +145,6 @@ function updateServerQuantity(){
         item['quantity'] = Number($(this).val());
         _data.push(item);
     })
-    console.log(_data);
     $.ajax({
         method: 'PATCH',
         url: "/order/cart-api/",

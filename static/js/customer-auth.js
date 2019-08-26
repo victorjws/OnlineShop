@@ -4,7 +4,6 @@ function logout() {
 function saveToken(data) {
     Cookies.remove('token');
     Cookies.set('token', data.token);
-    console.log("token saved");
 };
 function verifyToken(token) {
     let _data = {"token": token}
@@ -80,8 +79,6 @@ function checkNeedRefresh() {
     var now = new Date;
     var utc_timestamp = Date.UTC(now.getUTCFullYear(),now.getUTCMonth(), now.getUTCDate() ,
           now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds()) / 1000;
-//    console.log("token: " + (decoded.expiration + 32400))
-//    console.log("utc_timestamp: " + utc_timestamp)
     if ((decoded.expiration + 32400) < utc_timestamp){
         refreshToken(stored_token);
     }
@@ -106,7 +103,6 @@ function registerCustomer(){
             },
             error: function (result){
                 alert("에러가 발생했습니다.");
-                console.log(result)
             }
         });
     });

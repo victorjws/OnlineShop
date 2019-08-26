@@ -3,13 +3,13 @@ from django.db.models import Case
 from django.db.models import F
 from django.db.models import Sum
 from django.db.models import When
-from iamporter import Iamporter
 from rest_framework import mixins
 from rest_framework import permissions
 from rest_framework.generics import GenericAPIView
 from rest_framework.generics import ListCreateAPIView
 from rest_framework.response import Response
 from rest_framework_jwt.utils import jwt_decode_handler
+from iamporter import Iamporter
 
 from config.settings import imp_key
 from config.settings import imp_secret
@@ -58,30 +58,6 @@ class CartListAPI(ListCreateAPIView, mixins.UpdateModelMixin):
             serializer.is_valid(raise_exception=True)
             serializer.save()
         return Response("update complete")
-
-    # def update(self, request, *args, **kwargs):
-    #     instance = Cart.objects.filter(customer=request.user.pk)
-    #     serializer = CartSerializer(instance=instance, data=request.data,
-    #                                 many=True)
-    #     serializer.customer_id = request.user.pk
-    #     print(serializer)
-    #     serializer.is_valid(raise_exception=True)
-    #     print(serializer.is_valid())
-    #     serializer.save()
-    #     return Response(serializer.data)
-
-    # def create(self, request, *args, **kwargs):
-    #     request.data['product'] = Product.object.get(
-    #         pk=request.data['product'])
-    #
-    #     request.data['customer'] = Customer.objects.get(
-    #         pk=request.data['customer'])
-    #     serializer = self.get_serializer(data=request.data)
-    #     print(serializer.is_valid(raise_exception=True))
-    #     self.perform_create(serializer)
-    #     headers = self.get_success_headers(serializer.data)
-    #     return Response(serializer.data, status=status.HTTP_201_CREATED,
-    #                     headers=headers)
 
 
 class CartExistCheckAPI(GenericAPIView):

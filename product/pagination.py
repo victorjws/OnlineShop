@@ -5,7 +5,7 @@ from rest_framework.response import Response
 
 
 class ProductPagination(pagination.PageNumberPagination):
-    page_size = 2
+    page_size = 3
     page_size_query_param = 'limit_count'
     max_page_size = 50
 
