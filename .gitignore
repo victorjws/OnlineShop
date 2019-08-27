@@ -282,3 +282,6 @@ media/
 
 # Dev
 dev_settings.py
+
+# static
+.static_root/
