@@ -1,1 +1,1 @@
-"# OnlineShop" 
+# OnlineShop with DRF and AJAX
