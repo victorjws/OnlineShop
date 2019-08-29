@@ -13,6 +13,7 @@ from iamporter import Iamporter
 
 from config.settings import imp_key
 from config.settings import imp_secret
+from product.models import Product
 from .models import Cart
 from .models import Order
 from .serializer import CartSerializer
@@ -48,16 +49,21 @@ class CartListAPI(ListCreateAPIView, mixins.UpdateModelMixin):
         return self.create(request, *args, **kwargs)
 
     def patch(self, request, *args, **kwargs):
+        result = "update failed"
         data = {
             i['product_id']: {k: v for k, v in i.items() if k != 'product_id'}
             for i in request.data
         }
-        for inst in self.get_queryset().filter(product_id__in=data.keys()):
-            serializer = self.get_serializer(inst, data=data[inst.product_id],
-                                             partial=True)
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
-        return Response("update complete")
+        with transaction.atomic():
+            for inst in self.get_queryset().filter(product_id__in=data.keys()):
+                serializer = self.get_serializer(inst,
+                                                 data=data[inst.product_id],
+                                                 partial=True)
+                serializer.is_valid(raise_exception=True)
+                serializer.save()
+                print(serializer.data)
+            result = "update complete"
+        return Response(result)
 
 
 class CartExistCheckAPI(GenericAPIView):
@@ -101,14 +107,18 @@ class PaymentComplete(GenericAPIView):
                 )
             )
         )
+        instance = {'status': 'failed'}
         if payment_info['amount'] == queryset['total_amount']:
             with transaction.atomic():
-                Order.objects.bulk_create(
+                ordered = Order.objects.bulk_create(
                     Cart.objects.filter(customer=customer_id))
                 Cart.objects.filter(customer=customer_id).delete()
-            instance = {'status': 'success'}
+                for i in ordered:
+                    product = Product.objects.get(name=i.product)
+                    product.stock -= i.quantity
+                    product.save()
+                instance = {'status': 'success'}
         else:
             client.cancel_payment(imp_uid=imp_uid, reason="amount mismatch")
-            instance = {'status': 'failed'}
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
