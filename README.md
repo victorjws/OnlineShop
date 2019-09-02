@@ -12,7 +12,6 @@ DRF로 구현한 온라인 쇼핑몰입니다. AJAX를 통해 프론트엔드에
 
     git clone https://github.com/fdsarewqvcxz/OnlineShop.git
     pip install -r requirements.txt
-    apt-get install nginx
 
 프로젝트에 포함된 .config 하위의 파일을 필요에 따라 수정합니다.
 
@@ -37,5 +36,3 @@ DRF로 구현한 온라인 쇼핑몰입니다. AJAX를 통해 프론트엔드에
 ## References
 * HTML Templates: https://colorlib.com/wp/template/minishop/ (CC BY 3.0 Licensed)
 * Iamport: https://www.iamport.kr/
-
-## API Specification
