@@ -19,12 +19,7 @@ function putOrderData(result) {
                 total_price = data.product.price * data.quantity;
             }
             order += '원</td>'
-            + '<td class="quantity">'
-            +    '<div class="input-group mb-3">'
-            +        '<input id="quantity-' + data.product.id + '" type="text" name="quantity" readonly '
-            +           'class="quantity form-control input-number" value="' + data.quantity + '" min="1" max="99999">'
-            +    '</div>'
-            + '</td>'
+            + '<td class="quantity" id="quantity-' + data.product.id + '">' + data.quantity + '</td>'
             + '<td class="total">' + total_price.format() + '원</td>'
             + '<td class="order-date">' + data.order_date + '</td>'
             + '</tr>';
