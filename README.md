@@ -11,7 +11,7 @@ DRF로 구현한 온라인 쇼핑몰입니다. AJAX를 통해 프론트엔드에
 본 쇼핑몰은 Nginx <-> uWSGI <-> Django로 구성하였습니다.
 
     git clone https://github.com/fdsarewqvcxz/OnlineShop.git
-    pip install -r requirements.txt
+    pip install -r OnlineShop/requirements.txt
 
 프로젝트에 포함된 .config 하위의 파일을 필요에 따라 수정합니다.
 
