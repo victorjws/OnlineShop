@@ -1,6 +1,9 @@
 # OnlineShop with DRF and AJAX
 DRF로 구현한 온라인 쇼핑몰입니다. AJAX를 통해 프론트엔드에서 백엔드로 통신을 구현하였습니다.
 
+## Demo Website
+http://ec2-15-164-221-187.ap-northeast-2.compute.amazonaws.com/
+
 ## Features
 * DRF-JWT를 이용한 로그인
 * Iamport를 이용한 온라인 결제 서비스
