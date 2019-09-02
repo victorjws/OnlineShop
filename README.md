@@ -44,3 +44,7 @@ test 계정: test@test.com  /  비밀번호: test
 ## References
 * HTML Templates: https://colorlib.com/wp/template/minishop/ (CC BY 3.0 Licensed)
 * Iamport: https://www.iamport.kr/
+
+## ToDo
+* API 설명서 작성
+* 상품 Review 추가
