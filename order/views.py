@@ -3,8 +3,8 @@ from django.db.models import Case
 from django.db.models import F
 from django.db.models import Sum
 from django.db.models import When
-from rest_framework import mixins
 from rest_framework import permissions
+from rest_framework import status
 from rest_framework.generics import GenericAPIView
 from rest_framework.generics import ListCreateAPIView
 from rest_framework.response import Response
@@ -35,7 +35,7 @@ class OrderListAPI(ListCreateAPIView):
         return queryset
 
 
-class CartListAPI(ListCreateAPIView, mixins.UpdateModelMixin):
+class CartListAPI(ListCreateAPIView):
     serializer_class = CartSerializer
     permission_classes = [permissions.IsAuthenticated]
 
@@ -61,9 +61,16 @@ class CartListAPI(ListCreateAPIView, mixins.UpdateModelMixin):
                                                  partial=True)
                 serializer.is_valid(raise_exception=True)
                 serializer.save()
-                print(serializer.data)
             result = "update complete"
-        return Response(result)
+        return Response(result, status=status.HTTP_200_OK)
+
+    def delete(self, request, *args, **kwargs):
+        result = "delete failed"
+        deleted, _ = self.get_queryset().filter(
+            product_id=request.data['product_id']).delete()
+        if deleted > 0:
+            result = "delete complete"
+        return Response(result, status=status.HTTP_200_OK)
 
 
 class CartExistCheckAPI(GenericAPIView):

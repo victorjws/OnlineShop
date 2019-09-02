@@ -19,7 +19,7 @@ function putCartData(result) {
         let cur_price;
         cart = '<tr class="text-center">'
             + '<td class="product-remove">'
-            +    '<a href="#"><span class="ion-ios-close"></span></a></td>'
+            +    '<a href="javascript:deleteCartData(' + data.product.id + ');"><span class="ion-ios-close"></span></a></td>'
             + '<td class="image-prod">'
             +    '<div class="img" style="background-image:url(' + data.product.picture + ');"></div>'
             + '</td>'
@@ -57,9 +57,8 @@ function putCartData(result) {
             + '<td class="total" total="' + total_price + '">' + total_price.format() + '원</td>'
             + '</tr>';
         $("#cart-table").append(cart);
-        subtotal += total_price;
     });
-    setTotal();
+    updateTotal();
 };
 function setIamport(){
     $('#order').click(function(e){
@@ -138,7 +137,7 @@ function updateTotal(){
 }
 function updateServerQuantity(){
     let _data = [];
-    let r;
+    let r = false;
     $(".quantity input").each(function(){
         var id_attr = $(this).attr("id");
         var product_id = String(id_attr).split('-');
@@ -160,16 +159,41 @@ function updateServerQuantity(){
         success: function (result){
             if(result === "update complete"){
                 r = true;
-            } else {
-                r = false;
             }
-        },
-        error: function (result){
-            r = false;
         }
     });
     return r;
 };
+function deleteCartData(product_id){
+    let _data = {};
+    let r = false;
+    _data['product_id'] = product_id;
+    $.ajax({
+        method: 'DELETE',
+        url: "/order/cart-api/",
+        data: JSON.stringify(_data),
+        contentType: "Application/json",
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader("Authorization", "Bearer " + Cookies.get('token'));
+        },
+        success: function (result){
+            if(result === "delete complete"){
+                r = true;
+            }
+        },
+        complete: function (result){
+            getCartData();
+            setPlusMinusButtonEvent();
+            changeQuantity();
+            numbersOnly();
+            setIamport();
+        },
+        error: function (result){
+            console.log(result);
+        }
+    });
+    return r;
+}
 function getCartData() {
     $.ajax({
         method: 'GET',

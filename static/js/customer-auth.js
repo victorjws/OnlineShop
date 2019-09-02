@@ -6,8 +6,8 @@ function saveToken(data) {
     Cookies.set('token', data.token);
 };
 function verifyToken(token) {
-    let _data = {"token": token}
-    let r;
+    let _data = {"token": token};
+    let r = false;
     $.ajax({
         method: 'POST',
         url: "/verify-token/",
@@ -19,14 +19,13 @@ function verifyToken(token) {
         error: function(result) {
             logout();
             alert("토큰이 만료되었습니다.\n다시 로그인해주세요.");
-            r = false;
         }
     });
     return r;
 };
 function refreshToken(token) {
-    let _data = {"token": token}
-    let r;
+    let _data = {"token": token};
+    let r = false;
     $.ajax({
         method: 'POST',
         url: "/refresh-token/",
@@ -39,9 +38,9 @@ function refreshToken(token) {
         error: function(result) {
             logout();
             alert("토큰이 만료되었습니다.\n다시 로그인해주세요.");
-            r = false;
         }
     });
+    return r;
 };
 function checkAuthStatus() {
     let stored_token = Cookies.get('token');
