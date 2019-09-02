@@ -32,9 +32,6 @@ function getProductDetail(id) {
         }
     });
 };
-//function productLeave(id) {
-//    $("#product-" + id).popover('hide');
-//};
 function putProductData(result, version) {
     let product;
     let pagination;
@@ -65,8 +62,6 @@ function putProductData(result, version) {
         });
         product += '</span></div></div>'
             + '<h3><a href="/product/' + data.id + '/">'
-//            + 'onmouseenter="productDetail(' + data.id + ');"'
-//            + 'onmouseleave="productLeave(' + data.id + ');">'
             + data.name + '</a></h3><div class="pricing"><p class="price">';
         if (Boolean(data.is_discount)){
             product += '<span class="mr-2 price-dc">' + data.price.format()
@@ -221,7 +216,6 @@ function setPlusMinusButtonEvent(){
         $(this).parent().parent().find('input').val(quantity + 1).trigger('change');
     });
     $('.quantity-left-minus').on("click", function(e){
-        // Stop acting like a button
         e.preventDefault();
         var quantity = parseInt($(this).parent().parent().find('input').val());
         if(quantity>1){
