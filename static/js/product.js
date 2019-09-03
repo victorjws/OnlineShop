@@ -16,7 +16,7 @@ function putProductDetail(data){
         + '<img src="' + data.picture + '" class="img-fluid" alt="Colorlib Template"></a>';
     product_name = data.name;
     product_price = '<span>' + data.price.format() + '원</span>';
-    product_description = data.description.replace(/\n/gi, "<br/>");
+    product_description = data.description.replace(/\r\n/gi, "<br/>");
 
     $("#product-img").append(product_img);
     $("#product-name").append(product_name);
