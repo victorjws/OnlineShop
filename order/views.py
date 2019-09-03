@@ -6,6 +6,7 @@ from django.db.models import When
 from rest_framework import permissions
 from rest_framework import status
 from rest_framework.generics import GenericAPIView
+from rest_framework.generics import ListAPIView
 from rest_framework.generics import ListCreateAPIView
 from rest_framework.response import Response
 from rest_framework_jwt.utils import jwt_decode_handler
@@ -22,7 +23,7 @@ from .serializer import CartExistSerializer
 from .serializer import PaymentCompleteSerializer
 
 
-class OrderListAPI(ListCreateAPIView):
+class OrderListAPI(ListAPIView):
     serializer_class = OrderSerializer
     permission_classes = [permissions.IsAuthenticated]
 
@@ -30,8 +31,8 @@ class OrderListAPI(ListCreateAPIView):
         customer = self.request.auth
         customer = jwt_decode_handler(customer)
         customer = customer.get('email')
-
-        queryset = Order.objects.filter(customer__email=customer)
+        queryset = Order.objects.filter(customer__email=customer).order_by(
+            '-pk')
         return queryset
 
 

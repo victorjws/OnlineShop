@@ -47,15 +47,3 @@ function getOrderData() {
         }
     });
 };
-function updateCartData() {
-    $.ajax({
-        method: 'POST',
-        url: "/order/order-api/",
-        beforeSend: function(xhr) {
-            xhr.setRequestHeader("Authorization", "Bearer " + Cookies.get('token'));
-        },
-        success: function (result){
-            putOrderData(result);
-        },
-    });
-}
