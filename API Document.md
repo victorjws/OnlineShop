@@ -1,5 +1,6 @@
 # API Document
 ## Index
+* [/obtain-token/](#obtaintoken)
 * [Product](#product)
   + [/product/list-api/](#listapi)
     - [[GET] 쇼핑몰의 상품목록을 반환합니다.](#listapiget)
@@ -19,6 +20,14 @@
     - [[GET] 상품이 장바구니에 존재하는지 여부를 반환합니다.](#existapiget)
   + [/order/payments-complete/](#paymentscomplete)
     - [[POST] 결제가 정상적으로 처리되었는지 확인 후 결제 완료 목록에 상품을 추가하고 장바구니에서 삭제합니다. 동시에 상품 재고량도 수정합니다.](#paymentscompletepost)
+## /obtain-token/ <a id="obtaintoken"></a>
+[DRF-JWT](https://jpadilla.github.io/django-rest-framework-jwt/)의 기능을 사용하였습니다. 다만 필요한 정보는 아래와 같습니다.
+* Parameter
+  
+|Parameter|Default value|Description|Param type|Data type|Required|
+|---|---|---|---|---|---|
+|email|None|사용자 email|formData|string|true|
+|password|Noen|사용자 비밀번호|formData|string|true|
 
 ## Product
 ### /product/list-api/ <a id="listapi"></a>
