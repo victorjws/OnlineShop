@@ -41,11 +41,11 @@ test 계정: test@test.com  /  비밀번호: test
 
     source OnlineShop/.config/deploy.sh
 
+## [API Document](https://github.com/fdsarewqvcxz/OnlineShop/blob/master/API%20Document.md)
+
 ## References
 * HTML Templates: https://colorlib.com/wp/template/minishop/ (CC BY 3.0 Licensed)
 * Iamport: https://www.iamport.kr/
-
-## [API Document](https://github.com/fdsarewqvcxz/OnlineShop/blob/master/API%20Document.md)
 
 ## ToDo
 * 상품 Review 추가
