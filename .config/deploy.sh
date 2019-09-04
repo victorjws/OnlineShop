@@ -8,3 +8,4 @@ sudo systemctl daemon-reload
 sudo systemctl enable uwsgi
 sudo systemctl restart uwsgi nginx
 sudo systemctl status uwsgi nginx
+:q
