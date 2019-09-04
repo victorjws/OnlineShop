@@ -7,3 +7,4 @@ sudo cp -f /srv/OnlineShop/.config/uwsgi.service /etc/systemd/system/uwsgi.servi
 sudo systemctl daemon-reload
 sudo systemctl enable uwsgi
 sudo systemctl restart uwsgi nginx
+sudo systemctl status uwsgi nginx
