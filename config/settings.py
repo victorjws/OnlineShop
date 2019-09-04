@@ -44,7 +44,7 @@ imp_secret = get_secret("imp_secret")
 DEBUG = False
 
 ALLOWED_HOSTS = [
-    '.compute.amazonaws.com',
+    '.onlineshopdemo.tk',
 ]
 
 # Application definition
