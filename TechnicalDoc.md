@@ -27,3 +27,18 @@ nginx-app.conf의 443 포트 부분에 추가
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
 
 nginx 재시작
+### Let's Encrypt 자동갱신 설정
+
+    # crontab 확인
+    sudo crontab -l
+    # crontab 편집
+    sudo crontab -e
+    # crontab 내부에 아래 내용 저장
+      0 4 1 * * certbot renew --renew-hook="sudo systemctl restart nginx"
+    # | | | | | crontab time format
+    # | | | | +---- Day of the Week   (range: 0-6, Sunday - Saturday)
+    # | | | +------ Month of the Year (range: 1-12)
+    # | | +-------- Day of the Month  (range: 1-31)
+    # | +---------- Hour              (range: 0-23)
+    # +------------ Minute            (range: 0-59)
+
