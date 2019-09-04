@@ -3,7 +3,7 @@ DRF로 구현한 온라인 쇼핑몰입니다. AJAX를 통해 프론트엔드에
 
 ## Demo Website
 
-http://ec2-15-164-221-187.ap-northeast-2.compute.amazonaws.com/
+http://onlineshopdemo.tk/
 
 test 계정: test@test.com  /  비밀번호: test
 
